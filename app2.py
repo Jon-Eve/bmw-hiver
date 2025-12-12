@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import io
 
-# --- CONFIGURATION DU SITE ---
-st.set_page_config(page_title="BMW Winter Configurator", page_icon="❄️", layout="wide")
+# --- 1. CONFIGURATION (Titre de l'onglet) ---
+st.set_page_config(page_title="BMW Bilia Hiver", page_icon="❄️", layout="wide")
 
-# --- DONNÉES (Ta base de données) ---
+# --- 2. BASE DE DONNÉES (Ne pas toucher) ---
 csv_data = """Modele;Chassis;Style;Pouces;Ref;Pneu;Prix_Promo;Compatibilite_Freins_M;Chainable;Note_Importante
 Série 1 / Série 2 GC;F40 / F44;474;16;36 11 5 A92 C63;Continental TS860S;1549;NON;OUI;
 Série 1 / Série 2 GC;F40 / F44;489;17;36 11 2 471 501;Pirelli Snowcontrol 3;2158;NON;OUI;
@@ -61,169 +61,98 @@ X5 / X6;G05 / G06 LCI;740M;20;36 11 5 A81 992;Michelin Pilot Alpin;4452;OUI;OUI;
 X5 / X6;G05 / G06 LCI;741M;21;36 11 5 A81 9A7;Pirelli Scorpion;5352;OUI;NON;
 """
 
-# --- CSS / DESIGN PREMIUM ---
-# Ici on définit le style visuel : Couleurs BMW, Ombres, Cartes
+# --- 3. MISE EN PAGE & STYLE (Safe Design) ---
 st.markdown("""
     <style>
-    /* Fond général plus propre */
-    .stApp {
-        background-color: #f8f9fa;
-    }
-    
-    /* Le Header Bleu BMW */
-    .header-style {
+    /* En-tête bleu BMW */
+    .header-box {
         background-color: #1c69d4;
         padding: 20px;
         border-radius: 10px;
         color: white;
         text-align: center;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    
-    /* Style des cartes de produits */
-    .product-card {
-        background-color: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        border: 1px solid #e0e0e0;
         margin-bottom: 20px;
-        transition: transform 0.2s;
     }
-    .product-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-        border-color: #1c69d4;
-    }
-    
-    /* Prix */
-    .price-text {
-        font-size: 26px;
-        color: #1c69d4;
-        font-weight: 800;
-    }
-    .promo-label {
-        background-color: #d9534f;
+    .header-box h1 {
         color: white;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
-        text-transform: uppercase;
+        margin: 0;
     }
-    
-    /* Bouton */
     .stButton>button {
-        background-color: #222;
-        color: white;
+        background-color: #222; 
+        color: white; 
         border: none;
-        border-radius: 6px;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        transition: all 0.3s;
+        width: 100%;
     }
     .stButton>button:hover {
         background-color: #1c69d4;
-        color: white;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- HEADER DE LA PAGE ---
-st.markdown("""
-    <div class="header-style">
-        <h1 style='margin:0; font-size: 2.5rem;'>❄️ CAMPAGNE HIVER BMW</h1>
-        <p style='margin:0; opacity: 0.9;'>Assistant de Vente & Magasin | Saison 2025-2026</p>
-    </div>
-""", unsafe_allow_html=True)
+# --- EN-TÊTE ---
+st.markdown('<div class="header-box"><h1>❄️ CAMPAGNE HIVER BMW 2025</h1></div>', unsafe_allow_html=True)
 
-# --- CHARGEMENT ---
+# --- LECTURE DONNÉES ---
 df = pd.read_csv(io.StringIO(csv_data), sep=";")
 df.columns = df.columns.str.strip()
 
-# --- INTERFACE PRINCIPALE (2 Colonnes) ---
-col_filtres, col_resultats = st.columns([1, 3])
+# --- COLONNES ---
+col_gauche, col_droite = st.columns([1, 3])
 
-# --- COLONNE DE GAUCHE : LES FILTRES ---
-with col_filtres:
-    st.markdown("### 🔍 Configuration")
-    st.markdown("Remplissez les infos pour filtrer le catalogue.")
-    
+# --- FILTRES (Gauche) ---
+with col_gauche:
     with st.container(border=True):
-        # 1. Modèle
+        st.subheader("🔍 Véhicule")
         liste_modeles = sorted(df['Modele'].unique())
-        choix_modele = st.selectbox("Modèle du véhicule", liste_modeles)
+        choix_modele = st.selectbox("Sélectionnez le modèle :", liste_modeles)
         
         st.markdown("---")
-        
-        # 2. Options Techniques
-        st.write("**Contraintes techniques :**")
-        freins_m = st.checkbox("Freins M Sport (Bleu/Rouge)", value=False)
-        chaine = st.checkbox("Doit être chainable", value=False)
-        
-        st.markdown("---")
-        st.info("ℹ️ Sélectionnez le véhicule pour voir les kits compatibles.")
+        st.subheader("⚙️ Options")
+        freins_m = st.toggle("Freins M Sport (Bleu/Rouge)")
+        chaine = st.toggle("Doit être Chainable")
+        st.info("Cochez les cases si le véhicule a ces options.")
 
-# --- COLONNE DE DROITE : LES RÉSULTATS ---
-with col_resultats:
-    # Filtrage logique
+# --- RÉSULTATS (Droite) ---
+with col_droite:
+    # Filtrage
     kits = df[df['Modele'] == choix_modele].copy()
-    
     if freins_m:
         kits = kits[kits['Compatibilite_Freins_M'] == "OUI"]
     if chaine:
         kits = kits[kits['Chainable'] == "OUI"]
 
-    st.markdown(f"### 📦 {len(kits)} Kits disponibles pour : **{choix_modele}**")
-    
+    st.subheader(f"📦 {len(kits)} Kits trouvés pour {choix_modele}")
+
     if len(kits) == 0:
         st.warning("⚠️ Aucun kit compatible avec ces filtres.")
     else:
-        # Affichage en Grille (2 cartes par ligne)
-        grid_cols = st.columns(2)
-        
+        # Grille de résultats
+        cols = st.columns(2)
         for index, (idx, row) in enumerate(kits.iterrows()):
-            # On alterne les colonnes pour l'affichage grille
-            with grid_cols[index % 2]:
-                
-                # Image générique de roue (Pour faire joli en attendant les vraies)
-                img_url = "https://cdn-icons-png.flaticon.com/512/5716/5716474.png" 
-                
-                # HTML CARD
-                st.markdown(f"""
-                <div class="product-card">
-                    <div style="display:flex; justify-content:space-between; align-items:start;">
-                        <span style="font-size:1.2rem; font-weight:bold;">Style {row['Style']}</span>
-                        <span style="background:#eee; padding:2px 8px; border-radius:4px; font-weight:bold;">{row['Pouces']}"</span>
-                    </div>
+            with cols[index % 2]:
+                # Cadre du produit (Design propre natif)
+                with st.container(border=True):
+                    st.markdown(f"#### Style {row['Style']} - {row['Pouces']}\"")
                     
-                    <div style="display:flex; margin-top:15px; margin-bottom:15px;">
-                        <div style="flex:1; display:flex; justify-content:center; align-items:center;">
-                             <img src="{img_url}" width="80" style="opacity:0.6;">
-                        </div>
-                        <div style="flex:2; padding-left:15px; font-size:0.9rem; color:#555;">
-                            <div>🔘 <b>Pneu:</b> {row['Pneu']}</div>
-                            <div style="margin-top:5px; font-family:monospace; background:#f4f4f4; padding:2px; display:inline-block;">REF: {row['Ref']}</div>
-                            <div style="margin-top:5px;">
-                                { "✅ Chainable" if row['Chainable'] == "OUI" else "🚫 Pas de chaînes" }
-                            </div>
-                        </div>
-                    </div>
+                    # Infos techniques
+                    st.text(f"Pneu: {row['Pneu']}")
+                    st.code(f"Ref: {row['Ref']}")
+                    
+                    # Badges
+                    if row['Chainable'] == "OUI":
+                        st.caption("✅ Chainable")
+                    else:
+                        st.caption("🚫 Pas de chaînes")
+                        
+                    if pd.notna(row['Note_Importante']):
+                        st.error(f"⚠️ {row['Note_Importante']}")
 
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #eee; padding-top:10px;">
-                        <div>
-                            <span class="promo-label">-10% PROMO</span>
-                        </div>
-                        <div class="price-text">{row['Prix_Promo']} €</div>
-                    </div>
-                    
-                    <div style="margin-top:10px; color:orange; font-size:0.85rem; font-weight:bold;">
-                        {f"⚠️ {row['Note_Importante']}" if pd.notna(row['Note_Importante']) else ""}
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # Le bouton Streamlit doit être hors du HTML pour fonctionner en Python
-                if st.button(f"Sélectionner ce kit ({row['Style']})", key=row['Ref']):
-                    st.toast(f"✅ Ajouté ! Réf: {row['Ref']}")
+                    # Prix et Bouton
+                    st.markdown("---")
+                    c_prix, c_btn = st.columns([1, 1])
+                    with c_prix:
+                        st.metric(label="Prix Promo", value=f"{row['Prix_Promo']} €")
+                    with c_btn:
+                        st.write("") # Espace
+                        if st.button("Sélectionner", key=row['Ref']):
+                            st.toast(f"✅ Ajouté ! {row['Ref']}")
