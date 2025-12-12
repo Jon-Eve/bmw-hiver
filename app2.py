@@ -5,80 +5,62 @@ import io
 # --- CONFIG ---
 st.set_page_config(page_title="BMW Bilia - Kits Hiver 2025/26", page_icon="❄️", layout="centered")
 
-# --- BACKGROUND & STYLE ---
-background_url = "https://cdn.bmwblog.com/wp-content/uploads/2023/03/bmw-i5-winter-testing-32.jpg"  # BMW en neige
-
-st.markdown(f"""
+# --- STYLE SOBRE & PRO (inspiré PDF) ---
+st.markdown("""
 <style>
-    .stApp {{
-        background-image: url("{background_url}");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }}
-    .main-box {{
-        background-color: rgba(0, 0, 0, 0.75);
-        padding: 20px;
-        border-radius: 15px;
-        margin: 10px 0;
-    }}
-    h1, h2, h3, label, .stMarkdown, .stCaption {{
-        color: white !important;
-    }}
-    .orange-title {{
-        color: #ff6600 !important;
-        font-size: 36px !important;
+    .big-price {
+        font-size: 32px !important;
+        color: #e37222 !important;  /* Orange BMW */
         font-weight: bold;
         text-align: center;
-    }}
-    .big-price {{
-        font-size: 34px !important;
-        color: #ff6600 !important;
-        font-weight: bold;
-        text-align: center;
-    }}
-    .ref-code {{
+    }
+    .ref-code {
         font-family: monospace;
         font-size: 20px;
-        background: #444;
-        color: white;
+        background: #f0f0f0;
+        color: #333;
         padding: 10px 15px;
         border-radius: 8px;
         display: inline-block;
-    }}
-    .stButton>button {{
+        border: 1px solid #ddd;
+    }
+    .stButton>button {
         width: 100%;
-        background: #1c69d4;
+        background: #0066b1;  /* Bleu BMW */
         color: white;
         font-weight: bold;
-        height: 65px;
-        font-size: 22px;
+        height: 60px;
+        font-size: 20px;
         border-radius: 10px;
-        margin-top: 20px;
-    }}
-    .stButton>button:hover {{
-        background: #1452a6;
-    }}
-    img {{
+    }
+    .stButton>button:hover {
+        background: #004c87;
+    }
+    img {
         max-width: 100%;
         height: auto;
         border-radius: 12px;
         margin-bottom: 15px;
-    }}
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .orange-title {
+        color: #e37222;
+        font-size: 38px;
+        font-weight: bold;
+        text-align: center;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# --- HEADER ---
-st.markdown("<div class='main-box'>", unsafe_allow_html=True)
-col1, col2 = st.columns([1, 4])
-with col1:
-    st.markdown("🔵 **Bilia**")
-with col2:
-    st.markdown("<div class='orange-title'>CAMPAGNE KITS HIVER BMW<br>2025 - 2026</div>", unsafe_allow_html=True)
+# --- HEADER PRO ---
+st.markdown("<div style='text-align: center; padding: 20px;'>", unsafe_allow_html=True)
+st.markdown("🔵 **Bilia**")
+st.markdown("<div class='orange-title'>CAMPAGNE KITS HIVER BMW<br>2025 - 2026</div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.caption("👋 Outil rapide pour les conseillers – Prix remisés −10%")
 
-# --- DONNÉES ---
+# --- DONNÉES (identiques) ---
 csv_data = """Modele;Chassis;Style;Pouces;Ref;Pneu;Prix_Promo;Compatibilite_Freins_M;Chainable;Note_Importante
 Série 1 / Série 2 GC;F40 / F44;474;16;36 11 5 A92 C63;Continental TS860S;1549;NON;OUI;
 Série 1 / Série 2 GC;F40 / F44;489;17;36 11 2 471 501;Pirelli Snowcontrol 3;2158;NON;OUI;
@@ -134,54 +116,54 @@ X5 / X6;G05 / G06 LCI;740M;20;36 11 5 A81 992;Michelin Pilot Alpin;4452;OUI;OUI;
 X5 / X6;G05 / G06 LCI;741M;21;36 11 5 A81 9A7;Pirelli Scorpion;5352;OUI;NON;
 """
 
-# --- IMAGES JANTES (meilleures trouvées) ---
+# --- IMAGES JANTES (meilleures officielles trouvées) ---
 image_urls = {
-    '474': 'https://shop.bmw.co.uk/dw/image/v2/BJPN_PRD/on/demandware.static/-/Sites-masterCatalog_BMW/default/dw1c0b0a3e/images/hi-res/36_11_5_A92_C63_1.jpg',
+    '474': 'http://www.recambiosyaccesoriosbmw.com/cdn/shop/files/63898149b63177ac1ec5b5a74b263c8eb04dc228_doppelspeiche_474_reflexsilber_1_c9973b43-777e-4349-99d2-f4dbd109a53c.jpg?v=1750684718',
     '489': 'https://cdn.ekris.nl/580/conversions/5(5)-responsive.jpg',
     '554M': 'https://cargym.com/cdn/shop/products/554M_b4bb568d-083a-4db3-b2a1-9ba0e4673b11_1270x.jpg?v=1665051800',
-    '967': 'https://www.salesafter.eu/images/product_images/original_images/36115B4E8D3.webp',
+    '967': 'https://www.bmw.de/de/shop/ls/media/physical-goods/xl/bmw/global/product_images/36115B4E8D3_BMW_17_Zoll_Winter-Komplettrad_Goodyear_Ultra_Grip_Performance_3_967_Gunmetal_Grey_2024_2024_01.jpg',
     '974': 'https://mediapool.bmwgroup.com/cache/P9/2024/P90546890/P90546890-bmw-1-series-18-inch-winter-complete-wheel-v-spoke-974-gunmetal-grey-08-2024-600px.jpg',
-    '968M': 'https://cotswoldherefordparts.com/cdn/shop/files/36115B4E919_1.jpg?v=1751355755&width=1946',
+    '968M': 'https://werksraeder24.b-cdn.net/media/88/d7/52/1751363166/wr240025565-4x-bmw-alufelgen-2er-f74-1er-f70-18-zoll-styling-968-m-sternspeiche-666638-0.jpg?width=3000',
     '975M': 'https://cargym.com/cdn/shop/files/rn-image_picker_lib_temp_00bebe94-1cb6-4f46-bc37-1d8dde6258c0_846x.jpg?v=1743613769',
-    '976M': 'https://cdn.ekris.nl/33861/conversions/BMW-1-Serie-F70-2-Serie-F74-styling-976M-winterbanden-responsive.jpg',
+    '976M': 'https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1120200166790075',
     '778': 'https://buybestparts.com/hpeciai/a613276e16ecb9cf81c7ba603bb6a86e/eng_pl_17-Summer-Kit-BMW-Wheels-Style-778-Tires-Pirelli-Sensors-BMW-G20-G21-G22-G23-G42-17361_1.webp',
     '778 (RFT)': 'https://buybestparts.com/hpeciai/a613276e16ecb9cf81c7ba603bb6a86e/eng_pl_17-Summer-Kit-BMW-Wheels-Style-778-Tires-Pirelli-Sensors-BMW-G20-G21-G22-G23-G42-17361_1.webp',
-    '796M': 'https://djantite.bg/hpeciai/d14ec797d9d8a6f263c8fc34ed1d5d74/eng_pl_18-Winter-Kit-BMW-Wheels-Style-M796-Tires-Bridgestone-Sensors-BMW-G20-G21-G22-G23-17353_6.webp',
+    '796M': 'https://s3.amazonaws.com/rparts-sites/images/285f89b802bcb2651801455c86d78f2a/bbd102e1992aed201d34123bcde09e26.png',
     '848M': 'https://i.ebayimg.com/images/g/0mQAAOSwFm1k5H5l/s-l1200.jpg',
-    '898M': 'https://mediapool.bmwgroup.com/cache/P9/2020/P90392747/P90392747-the-new-bmw-3-series-sedan-m-performance-parts-19-inch-m-light-alloy-wheels-double-spoke-style-898-m-frozen-gunmetal-600px.jpg',
-    '186': 'https://cdn.ekris.nl/33864/conversions/Winterwielset-1-inch-Styling-186-incl_-Goodyear,-BMW-2-Serie-Active-Tourer-(U06)-responsive.jpg',
+    '898M': 'https://s3.amazonaws.com/rparts-sites/images/285f89b802bcb2651801455c86d78f2a/f9ed40c5e84440135a7e933b013b64e2.jpg',
+    '186': 'https://www.salesafter.eu/images/product_images/original_images/Doppelspeiche_186.jpg',
     '840': 'https://cdn.ekris.nl/33864/conversions/Winterwielset-1-inch-Styling-186-incl_-Goodyear,-BMW-2-Serie-Active-Tourer-(U06)-responsive.jpg',
-    '875': 'https://cdn.ekris.nl/33870/conversions/Winterwielset-1-inch-Styling-875-incl_-Hankook,-BMW-2-Serie-(U06)-responsive.jpg',
-    '838M': 'https://cdn.ekris.nl/73315/conversions/Winterwielset-18-inch-Styling-838M-incl_-Pirelli,-BMW-X1-&-X2-(U11,-U10)(2)-responsive.jpg',
-    '851': 'https://www.recambiosyaccesoriosbmw.com/cdn/shop/files/0ca6f5e061a85247eaca78bce971d4f5fad9b9f0_v_speiche_851_reflexsilber_1_4fbaacb7-faff-4845-8a18-64bcaed2f9bb.jpg?v=1738352001',
-    '853': 'https://cdn.ekris.nl/33880/conversions/Winterwielset-17-inch-Styling-851-incl_-Goodyear,-BMW-4-Serie-(G26)-responsive.jpg',
-    '858M': 'https://www.recambiosyaccesoriosbmw.com/cdn/shop/files/e2ff61a7f98c74ba64c834b1c7de3effd23e14eb_m_aerodynamikrad_858_midnight_grey_glanzgedreht_2_72d76482-eb05-4e31-a061-27546064f3a7.jpg?v=1755724499',
-    '859M': 'https://mediapool.bmwgroup.com/cache/P9/2021/P90416884/P90416884-bmw-4-series-gran-coupe-m-performance-parts-19-inch-m-light-alloy-wheel-y-spoke-859-m-jet-black-600px.jpg',
+    '875': 'http://www.recambiosyaccesoriosbmw.com/cdn/shop/files/78b2ed46b91de9b5e29fc9f8e522845833b79111_sternspeiche_875_lightning_grey_unicolor.jpg?v=1728086970',
+    '838M': 'https://cdn.webshopapp.com/shops/302216/files/469659958/image.jpg',
+    '851': 'https://cdn.webshopapp.com/shops/302216/files/460662914/image.jpg',
+    '853': 'https://www.salesafter.eu/images/product_images/original_images/Doppelspeiche853.jpg',
+    '858M': 'https://www.i4talk.com/attachments/img_6865-jpeg.40835/',
+    '859M': 'https://cargym.com/cdn/shop/files/859M_1_1528x.jpg?v=1743750974',
     '932': 'https://www.salesafter.eu/images/product_images/original_images/36115B5CFE3.webp',
-    '933': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90516880/P90516880-m-performance-parts-for-the-new-bmw-5-series-19-inch-triplex-wheel-933-refined-silver-08-2023-600px.jpg',
+    '933': 'https://s3.amazonaws.com/rp-part-images/assets/272563f6197781656956321e664bdb31.webp',
     '942M': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90516880/P90516880-m-performance-parts-for-the-new-bmw-5-series-19-inch-m-y-spoke-wheel-942-m-jet-black-matt-08-2023-600px.jpg',
     '939M': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90516880/P90516880-m-performance-parts-for-the-new-bmw-5-series-20-inch-m-aerodynamic-wheel-939-m-bicolor-08-2023-1999px.jpg',
-    '906': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90516880/P90516880-m-performance-parts-for-the-new-bmw-7-series-20-inch-m-aerodynamic-wheel-906-bicolor-gunmetal-grey-08-2023-600px.jpg',
-    '911M': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90516880/P90516880-m-performance-parts-for-the-new-bmw-7-series-20-inch-m-y-spoke-wheel-911-m-jet-black-matt-08-2023-600px.jpg',
-    '909M': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90516880/P90516880-m-performance-parts-for-the-new-bmw-7-series-21-inch-m-aerodynamic-wheel-909-m-jet-black-uni-08-2023-600px.jpg',
-    '833': 'https://www.salesafter.eu/images/product_images/original_images/36115a92c70.jpeg',
-    '879': 'https://www.picclickimg.com/8C0AAeSwdTVo56gE/Original-BMW-X1-iX1-U11-18-Inch-Winter.webp',
+    '906': 'https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1306835358126554',
+    '911M': 'https://cdn.revolutionparts.io/images/285f89b802bcb2651801455c86d78f2a/1b49e18b6ed43c0fe8a7463459834a60.jpg',
+    '909M': 'https://i.ebayimg.com/images/g/n~IAAOSwhm5j7wa6/s-l1200.jpg',
+    '833': 'https://i.ebayimg.com/images/g/pPUAAeSw0PtoKw2E/s-l1200.jpg',
+    '879': 'http://www.recambiosyaccesoriosbmw.com/cdn/shop/files/d6d1ecbf42ae82b738cb6a8dad235a7e77e3a14c_doppelspeiche_879_frozen_gunmetal_grey_2.jpg?v=1721311898',
     '1041': 'https://cdn.ekris.nl/33811/conversions/BMW-X1-U11-X2-U10-styling-1040-winterbanden-responsive.jpg',
-    '871M': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90509796/P90509796-bmw-x1-m35i-m-frozen-pure-grey-metallic-rim-19-styling-871m-06-2023-600px.jpg',
-    '872M': 'https://mediapool.bmwgroup.com/cache/P9/2023/P90509796/P90509796-bmw-x1-m35i-m-frozen-pure-grey-metallic-rim-20-styling-872m-06-2023-2250px.jpg',
-    '618': 'https://djantite.bg/hpeciai/9ae10d28e39736ec7942e4de657bc6af/eng_pl_Winter-Kit-17-BMW-Wheels-618-Pirelli-Tires-Sensors-BMW-5-G30-G31-G32-7-G11-G12-14008_8.webp',
-    '698M': 'https://mediapool.bmwgroup.com/cache/P9/2018/P90292747/P90292747-bmw-x3-x4-m-performance-parts-19-inch-m-light-alloy-wheels-double-spoke-style-698-m-ferric-grey-600px.jpg',
-    '921': 'https://mediapool.bmwgroup.com/cache/P9/2024/P90546890/P90546890-bmw-x3-18-inch-winter-complete-wheel-y-spoke-921-refined-silver-08-2024-600px.jpg',
-    '903': 'https://mediapool.bmwgroup.com/cache/P9/2024/P90546890/P90546890-bmw-x3-19-inch-winter-complete-wheel-double-spoke-903-refined-silver-08-2024-600px.jpg',
-    '1035M': 'https://mediapool.bmwgroup.com/cache/P9/2024/P90546890/P90546890-bmw-x3-19-inch-m-light-alloy-wheel-y-spoke-1035-m-bicolour-midnight-grey-gloss-lathed-08-2024-600px.jpg',
-    '842': 'https://cotswoldherefordparts.com/cdn/shop/files/36115A085B1_3.jpg?v=1751355755&width=1946',
+    '871M': 'https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1272608311549259',
+    '872M': 'https://cargym.com/cdn/shop/files/P90509796-bmw-x1-m35i-m-frozen-pure-grey-metallic-rim-20-styling-872m-06-2023-2250px_2250x.jpg?v=1751611704',
+    '618': 'https://cdn.webshopapp.com/shops/302216/files/404704841/image.jpg',
+    '698M': 'https://i.ebayimg.com/images/g/g-AAAOSw1tNbqqhs/s-l400.jpg',
+    '921': 'https://s3.amazonaws.com/rp-part-images/assets/66e0ccd3e39dd12ab84f958f60083f3c.webp',
+    '903': 'https://forzaaa.com/cdn/shop/files/new-903-style-oem-design-forged-wheels-rims-for-bmw-7-g70-730i-735i-740i-730d-740d-750e-760i-i7-m760e-2022_1.jpg?v=1748953412&width=1920',
+    '1035M': 'https://s3.amazonaws.com/rp-part-images/assets/5b5eeeab2d4ec1d2151413e6356876e1.webp',
+    '842': 'https://www.salesafter.eu/images/product_images/original_images/Doppelspeiche842.jpg',
     '735': 'https://buybestparts.com/hpeciai/a8f90dfeb7544d13c0086ad84bc8bb00/eng_pl_19-Winter-Kit-BMW-Wheels-Style-735-Pirelli-Tires-2021-Sensors-BMW-X5-G05-X6-G06-27065_2.webp',
-    '748M': 'https://mediapool.bmwgroup.com/cache/P9/2019/P90339847/P90339847-bmw-x5-x6-m-performance-parts-20-inch-m-light-alloy-wheel-star-spoke-748-m-jet-black-matt-600px.jpg',
+    '748M': 'https://assets.turnermotorsport.com/product_library_tms/1614715_x600.jpg',
     '740M': 'https://buybestparts.com/hpeciai/39130291c63794ca9c38a75ed8bee1d7/eng_pl_20-Winter-Kit-BMW-Wheels-Style-740-M-Tires-Michelin-2020-Sensors-BMW-X5-G05-X6-G06-26199_8.webp',
-    '741M': 'https://mediapool.bmwgroup.com/cache/P9/2019/P90339847/P90339847-bmw-x5-x6-m-performance-parts-21-inch-m-light-alloy-wheel-y-spoke-741-m-orbit-grey-gloss-lathed-600px.jpg'
+    '741M': 'https://cargym.com/cdn/shop/files/2025_01_24_9999_51_1_1800x.jpg?v=1762760909'
 }
 
-# --- CHARGEMENT ---
+# --- CHARGEMENT & TRI ---
 @st.cache_data
 def load_data():
     df = pd.read_csv(io.StringIO(csv_data), sep=";")
@@ -192,7 +174,6 @@ def load_data():
 
 df = load_data()
 
-# --- TRI MODÈLES ---
 ordre_modeles = [
     "Série 1 / Série 2 GC", "New Série 1 / Série 2 GC", "Série 2 Coupé", "Série 2 Active Tourer",
     "Série 3 / 4", "Série 4 GC / i4", "Série 5 (Thermique)", "i5 / Série 5 Hybride",
@@ -256,5 +237,4 @@ else:
                 st.success("Sélectionné ! Référence copiée.")
                 st.markdown(f"<script>navigator.clipboard.writeText('{row['Ref']}'); alert('Réf {row['Ref']} copiée !');</script>", unsafe_allow_html=True)
 
-st.markdown("</div>", unsafe_allow_html=True)
 st.caption("Outil Bilia – Valable hiver 2025/2026")
